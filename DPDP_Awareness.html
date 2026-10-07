@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DPDP Act Awareness</title>
+<style>
+  :root {
+    --bg: #f6f7fb;
+    --surface: #ffffff;
+    --surface-2: #eef1f7;
+    --text: #1a2233;
+    --muted: #5a6478;
+    --border: #dde2ec;
+    --navy: #14213d;
+    --accent: #0f8b8d;
+    --accent-soft: #e0f3f3;
+    --gold: #c9973b;
+    --gold-soft: #fbf1de;
+    --good: #1f8a4c;
+    --good-soft: #e3f4ea;
+    --bad: #c0392b;
+    --bad-soft: #fbe6e3;
+    --shadow: 0 2px 10px rgba(20, 33, 61, 0.07);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1420; --surface: #171e2d; --surface-2: #1f2839; --text: #e6e9f0; --muted: #9aa4b8;
+      --border: #2c3650; --navy: #0b1222; --accent: #3cc0c2; --accent-soft: #163536;
+      --gold: #e2b660; --gold-soft: #352b17; --good: #4cc483; --good-soft: #15301f;
+      --bad: #f07466; --bad-soft: #3a1c19; --shadow: 0 2px 10px rgba(0,0,0,0.35);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1420; --surface: #171e2d; --surface-2: #1f2839; --text: #e6e9f0; --muted: #9aa4b8;
+    --border: #2c3650; --navy: #0b1222; --accent: #3cc0c2; --accent-soft: #163536;
+    --gold: #e2b660; --gold-soft: #352b17; --good: #4cc483; --good-soft: #15301f;
+    --bad: #f07466; --bad-soft: #3a1c19; --shadow: 0 2px 10px rgba(0,0,0,0.35);
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 70px; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+    line-height: 1.6; font-size: 16px;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+
+  /* Nav */
+  nav.top {
+    position: sticky; top: 0; z-index: 10; background: var(--navy); color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  nav.top .wrap { display: flex; align-items: center; gap: 12px; height: 56px; }
+  nav.top .brand { font-weight: 700; letter-spacing: .3px; white-space: nowrap; }
+  nav.top .brand span { color: var(--gold); }
+  nav.top .links { display: flex; gap: 4px; overflow-x: auto; flex: 1; scrollbar-width: none; }
+  nav.top .links::-webkit-scrollbar { display: none; }
+  nav.top a {
+    color: #cfd6e4; text-decoration: none; font-size: 14px; padding: 6px 10px; border-radius: 6px; white-space: nowrap;
+  }
+  nav.top a:hover, nav.top a.active { background: rgba(255,255,255,0.12); color: #fff; }
+  #themeBtn {
+    background: transparent; border: 1px solid rgba(255,255,255,0.3); color: #fff; border-radius: 6px;
+    padding: 5px 9px; cursor: pointer; font-size: 14px;
+  }
+
+  /* Hero */
+  header.hero {
+    background: linear-gradient(135deg, #14213d 0%, #1d3557 55%, #0f6f71 100%); color: #fff;
+    padding: 56px 0 48px;
+  }
+  .hero .tag {
+    display: inline-block; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25);
+    padding: 4px 12px; border-radius: 999px; font-size: 13px; margin-bottom: 14px;
+  }
+  .hero h1 { font-size: clamp(28px, 5vw, 44px); line-height: 1.15; margin: 0 0 14px; }
+  .hero h1 em { font-style: normal; color: #f0c26b; }
+  .hero p { max-width: 680px; color: #d8e0ee; font-size: 17px; margin: 0 0 24px; }
+  .hero .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; max-width: 760px; }
+  .hero .stat { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 10px; padding: 14px; }
+  .hero .stat b { display: block; font-size: 24px; color: #f0c26b; }
+  .hero .stat small { color: #d8e0ee; font-size: 13px; }
+
+  section { padding: 52px 0 12px; }
+  h2 { font-size: clamp(22px, 3.5vw, 30px); margin: 0 0 6px; }
+  .lead { color: var(--muted); margin: 0 0 24px; max-width: 720px; }
+  .eyebrow { color: var(--accent); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; }
+
+  .card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 18px;
+    box-shadow: var(--shadow);
+  }
+  .grid { display: grid; gap: 14px; }
+  .g2 { grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .g3 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 26px; }
+  .timeline::before { content: ""; position: absolute; left: 8px; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 18px; }
+  .tl-item::before {
+    content: ""; position: absolute; left: -23px; top: 6px; width: 12px; height: 12px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--surface); box-shadow: 0 0 0 2px var(--accent);
+  }
+  .tl-item.upcoming::before { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+  .tl-item b { display: block; }
+  .tl-item span { color: var(--muted); font-size: 14px; }
+
+  /* Flip term cards */
+  .term { cursor: pointer; perspective: 900px; min-height: 160px; border: none; background: none; padding: 0; text-align: left; font: inherit; color: inherit; }
+  .term-inner { position: relative; width: 100%; height: 100%; min-height: 160px; transition: transform .5s; transform-style: preserve-3d; }
+  .term.flipped .term-inner { transform: rotateY(180deg); }
+  .term-face {
+    position: absolute; inset: 0; backface-visibility: hidden; border-radius: 12px; padding: 18px;
+    border: 1px solid var(--border); box-shadow: var(--shadow); display: flex; flex-direction: column; justify-content: center;
+  }
+  .term-front { background: var(--surface); }
+  .term-front .icon { font-size: 28px; }
+  .term-front h3 { margin: 6px 0 2px; font-size: 18px; }
+  .term-front small { color: var(--muted); }
+  .term-back { background: var(--accent-soft); transform: rotateY(180deg); font-size: 14.5px; }
+  .hint { font-size: 13px; color: var(--muted); margin: -12px 0 16px; }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+  .tab {
+    border: 1px solid var(--border); background: var(--surface); color: var(--text); padding: 9px 16px;
+    border-radius: 999px; cursor: pointer; font-weight: 600; font-size: 15px;
+  }
+  .tab[aria-selected="true"].do { background: var(--good); border-color: var(--good); color: #fff; }
+  .tab[aria-selected="true"].dont { background: var(--bad); border-color: var(--bad); color: #fff; }
+  .panel[hidden] { display: none; }
+
+  .rule { display: flex; gap: 12px; align-items: flex-start; }
+  .rule .badge {
+    flex: none; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+    font-weight: 800; font-size: 17px;
+  }
+  .do .badge { background: var(--good-soft); color: var(--good); }
+  .dont .badge { background: var(--bad-soft); color: var(--bad); }
+  .rule h4 { margin: 2px 0 4px; font-size: 16px; }
+  .rule p { margin: 0; color: var(--muted); font-size: 14.5px; }
+  .rule .eg { margin-top: 8px; font-size: 13.5px; background: var(--surface-2); border-radius: 8px; padding: 8px 10px; color: var(--text); }
+
+  /* Penalties */
+  .pen-row { display: grid; grid-template-columns: minmax(0, 1fr) 110px; gap: 6px 14px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .pen-row:last-child { border-bottom: none; }
+  .pen-row .label { font-weight: 600; font-size: 15px; }
+  .pen-row .amt { text-align: right; font-weight: 800; color: var(--bad); font-variant-numeric: tabular-nums; }
+  .bar { grid-column: 1 / -1; height: 10px; background: var(--surface-2); border-radius: 6px; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--gold), var(--bad)); border-radius: 6px; transition: width 1s ease; }
+  .pen-detail { grid-column: 1 / -1; font-size: 14px; color: var(--muted); display: none; }
+  .pen-row.open .pen-detail { display: block; }
+  .pen-row .chev { font-size: 12px; color: var(--muted); margin-left: 6px; }
+
+  .callout { border-left: 4px solid var(--gold); background: var(--gold-soft); padding: 14px 16px; border-radius: 8px; margin: 16px 0; }
+  .callout.red { border-color: var(--bad); background: var(--bad-soft); }
+
+  /* Accordion */
+  details { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 10px; box-shadow: var(--shadow); }
+  summary { cursor: pointer; padding: 14px 16px; font-weight: 600; list-style: none; display: flex; justify-content: space-between; gap: 10px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; font-size: 20px; line-height: 1; color: var(--accent); }
+  details[open] summary::after { content: "–"; }
+  details .body { padding: 0 16px 16px; color: var(--muted); font-size: 15px; }
+  details .body p { margin: 0 0 8px; }
+
+  /* Why */
+  .why .icon { font-size: 30px; }
+  .why h3 { margin: 6px 0 6px; font-size: 17px; }
+  .why p { margin: 0; color: var(--muted); font-size: 14.5px; }
+
+  /* Quiz */
+  .quiz-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; gap: 10px; flex-wrap: wrap; }
+  .progress { height: 6px; background: var(--surface-2); border-radius: 4px; overflow: hidden; margin-bottom: 18px; }
+  .progress i { display: block; height: 100%; background: var(--accent); width: 0; transition: width .4s; }
+  .q-text { font-size: 17px; font-weight: 600; margin: 0 0 14px; }
+  .opt {
+    display: block; width: 100%; text-align: left; padding: 12px 14px; margin-bottom: 10px; border-radius: 10px;
+    border: 1px solid var(--border); background: var(--surface-2); color: var(--text); font: inherit; cursor: pointer;
+  }
+  .opt:hover:not(:disabled) { border-color: var(--accent); }
+  .opt.correct { background: var(--good-soft); border-color: var(--good); }
+  .opt.wrong { background: var(--bad-soft); border-color: var(--bad); }
+  .opt:disabled { cursor: default; }
+  .feedback { display: none; padding: 12px 14px; border-radius: 10px; background: var(--accent-soft); font-size: 14.5px; margin-bottom: 12px; }
+  .btn {
+    background: var(--accent); color: #fff; border: none; padding: 10px 18px; border-radius: 8px; font-weight: 700;
+    cursor: pointer; font-size: 15px;
+  }
+  .btn.secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .result { text-align: center; padding: 20px 0; }
+  .result .score { font-size: 46px; font-weight: 800; color: var(--accent); }
+
+  /* Checklist */
+  .check { display: flex; gap: 12px; align-items: flex-start; padding: 12px 4px; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .check:last-child { border-bottom: none; }
+  .check input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--good); flex: none; cursor: pointer; }
+  .check.done span { color: var(--muted); text-decoration: line-through; }
+  .meter { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .meter .progress { flex: 1; margin: 0; height: 10px; }
+  .meter .progress i { background: var(--good); }
+
+  footer { margin-top: 56px; padding: 28px 0; background: var(--navy); color: #b9c2d4; font-size: 13.5px; }
+  footer b { color: #fff; }
+
+  @media (max-width: 600px) {
+    nav.top .brand { display: none; }
+    .pen-row { grid-template-columns: minmax(0,1fr) 92px; }
+    section { padding-top: 40px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <div class="brand">DPDP <span>Aware</span></div>
+    <div class="links" id="navLinks">
+      <a href="#what">What it is</a>
+      <a href="#terms">Key terms</a>
+      <a href="#rules">Do's &amp; Don'ts</a>
+      <a href="#rights">Customer rights</a>
+      <a href="#penalties">Consequences</a>
+      <a href="#why">Why it matters</a>
+      <a href="#quiz">Quiz</a>
+      <a href="#checklist">My checklist</a>
+    </div>
+    <button id="themeBtn" aria-label="Toggle dark mode">◐</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="tag">Data protection awareness · For every team member</div>
+    <h1>The DPDP Act, 2023:<br>Protecting the <em>people</em> behind the data</h1>
+    <p>India's Digital Personal Data Protection Act changes how we collect, use, store and share personal data. Every phone number, PAN card, Aadhaar copy and site-visit form belongs to a real person who trusted us. This guide covers what the law asks of you, what to avoid, and why it matters.</p>
+    <div class="stats">
+      <div class="stat"><b>₹250 Cr</b><small>maximum penalty per instance</small></div>
+      <div class="stat"><b>72 hrs</b><small>to send a detailed breach report to the Board</small></div>
+      <div class="stat"><b>&lt; 18</b><small>age that counts as a child: parental consent needed</small></div>
+      <div class="stat"><b>May 2027</b><small>when most obligations take full effect</small></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- WHAT -->
+  <section id="what">
+    <div class="eyebrow">The basics</div>
+    <h2>What is the DPDP Act?</h2>
+    <p class="lead">The Digital Personal Data Protection Act, 2023 is India's first full law on digital personal data. It covers personal data collected digitally, and also paper data that is later digitised. It applies to any organisation that processes such data in India, and to processing outside India when it is linked to offering goods or services to people in India.</p>
+    <div class="grid g2">
+      <div class="card">
+        <h3 style="margin-top:0">The core idea in one line</h3>
+        <p style="margin:0;color:var(--muted)">Collect only what you need, for a purpose you have clearly told the person about, with their consent. Keep it safe, use it only for that purpose, and delete it when the purpose is over.</p>
+        <div class="callout" style="margin-bottom:0">
+          <b>Who does it protect?</b> Customers, leads, channel partners, vendors, job applicants and employees. Anyone whose personal data we hold.
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0">Timeline</h3>
+        <div class="timeline">
+          <div class="tl-item"><b>Aug 2023</b><span>DPDP Act passed by Parliament and notified</span></div>
+          <div class="tl-item"><b>Nov 2025</b><span>DPDP Rules, 2025 notified. Data Protection Board of India set up</span></div>
+          <div class="tl-item upcoming"><b>Nov 2026</b><span>Consent Manager framework takes effect</span></div>
+          <div class="tl-item upcoming"><b>May 2027</b><span>Most obligations take full effect: notice, consent, security, breach reporting, rights, penalties</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TERMS -->
+  <section id="terms">
+    <div class="eyebrow">Speak the language</div>
+    <h2>Key terms you should know</h2>
+    <p class="lead">Six words cover most of the Act.</p>
+    <p class="hint">👆 Tap a card to flip it</p>
+    <div class="grid g3">
+      <button class="term"><div class="term-inner">
+        <div class="term-face term-front"><div class="icon">🧑</div><h3>Data Principal</h3><small>The person the data is about</small></div>
+        <div class="term-face term-back">The individual whose personal data is processed, such as a homebuyer, lead or employee. For a child (under 18), the parent or lawful guardian acts for them.</div>
+      </div></button>
+      <button class="term"><div class="term-inner">
+        <div class="term-face term-front"><div class="icon">🏢</div><h3>Data Fiduciary</h3><small>Decides why and how data is used</small></div>
+        <div class="term-face term-back">The organisation that decides the purpose and means of processing. That is <b>us</b>. "Fiduciary" means a position of trust: we hold the data on the person's behalf.</div>
+      </div></button>
+      <button class="term"><div class="term-inner">
+        <div class="term-face term-front"><div class="icon">⚙️</div><h3>Data Processor</h3><small>Processes data for us</small></div>
+        <div class="term-face term-back">A vendor that handles data on our instructions, such as a CRM provider, call centre, marketing agency or cloud host. We stay responsible for what they do with it.</div>
+      </div></button>
+      <button class="term"><div class="term-inner">
+        <div class="term-face term-front"><div class="icon">✅</div><h3>Consent</h3><small>Free, specific, informed, unambiguous</small></div>
+        <div class="term-face term-back">A clear "yes" through an affirmative action, for a specific purpose. No pre-ticked boxes and no bundling. Withdrawing consent must be as easy as giving it.</div>
+      </div></button>
+      <button class="term"><div class="term-inner">
+        <div class="term-face term-front"><div class="icon">⚖️</div><h3>Data Protection Board</h3><small>The regulator</small></div>
+        <div class="term-face term-back">The Data Protection Board of India investigates breaches and complaints, and imposes penalties of up to ₹250 crore per instance.</div>
+      </div></button>
+      <button class="term"><div class="term-inner">
+        <div class="term-face term-front"><div class="icon">🚨</div><h3>Personal Data Breach</h3><small>Any compromise of data</small></div>
+        <div class="term-face term-back">Any unauthorised processing, accidental disclosure, loss of access, alteration or destruction of personal data. A lost phone or a mis-sent email counts.</div>
+      </div></button>
+    </div>
+  </section>
+
+  <!-- DO / DONT -->
+  <section id="rules">
+    <div class="eyebrow">Day-to-day behaviour</div>
+    <h2>What we should do, and what we shouldn't</h2>
+    <p class="lead">Practical rules for sales, CRM, site visits, bookings, marketing and back office.</p>
+    <div class="tabs" role="tablist">
+      <button class="tab do" role="tab" aria-selected="true" data-panel="p-do">✔ Do's</button>
+      <button class="tab dont" role="tab" aria-selected="false" data-panel="p-dont">✘ Don'ts</button>
+    </div>
+
+    <div class="panel grid g2 do" id="p-do">
+      <div class="card rule"><div class="badge">✔</div><div><h4>Take clear consent before collecting data</h4><p>Tell the person what you are collecting and why, and get an explicit "yes". Use the approved consent form or checkbox, never a pre-ticked one.</p><div class="eg">💡 Site-visit forms should say: "We'll use your details to share project information and follow up on your enquiry."</div></div></div>
+      <div class="card rule"><div class="badge">✔</div><div><h4>Collect only what is needed</h4><p>Data minimisation. An enquiry needs a name and phone number, not PAN, Aadhaar or income details. Ask for KYC documents only at the booking stage.</p></div></div>
+      <div class="card rule"><div class="badge">✔</div><div><h4>Store data only in approved systems</h4><p>Use the official CRM or company drive. Personal data belongs in systems with access control and audit logs.</p><div class="eg">💡 Received an Aadhaar or PAN copy on WhatsApp? Upload it to the CRM, then delete it from your phone.</div></div></div>
+      <div class="card rule"><div class="badge">✔</div><div><h4>Use data only for the stated purpose</h4><p>If a customer shared details for Project A, check their consent before marketing other projects or passing them to partners.</p></div></div>
+      <div class="card rule"><div class="badge">✔</div><div><h4>Respect "stop" and "delete" requests right away</h4><p>When someone withdraws consent or asks for erasure, log it and pass it to the Data Protection / Grievance Officer. Stop all calls and messages.</p></div></div>
+      <div class="card rule"><div class="badge">✔</div><div><h4>Report any suspected breach immediately</h4><p>Lost laptop, wrong email recipient, phishing click, leaked sheet: report it to IT or the DPO the same hour. The company has to notify the Board and affected people without delay.</p></div></div>
+      <div class="card rule"><div class="badge">✔</div><div><h4>Lock devices and use strong passwords</h4><p>Screen lock, 2-factor authentication, no shared logins. Log out of the CRM on shared computers.</p></div></div>
+      <div class="card rule"><div class="badge">✔</div><div><h4>Handle children's data with extra care</h4><p>Anyone under 18 is a child. Get verifiable parental consent, and never track or target children with ads.</p></div></div>
+    </div>
+
+    <div class="panel grid g2 dont" id="p-dont" hidden>
+      <div class="card rule"><div class="badge">✘</div><div><h4>Don't buy or use purchased lead lists</h4><p>"HNI databases" and scraped lists come without valid consent. Calling these numbers puts the company directly at risk.</p></div></div>
+      <div class="card rule"><div class="badge">✘</div><div><h4>Don't share customer data on personal WhatsApp groups</h4><p>Forwarding KYC documents, phone numbers or payment details to personal chats or brokers outside approved channels is a disclosure risk.</p></div></div>
+      <div class="card rule"><div class="badge">✘</div><div><h4>Don't download data to personal devices or email</h4><p>No exporting CRM data to Excel on a personal laptop, pen drive or Gmail. If it isn't in a secured system, we can't protect it.</p></div></div>
+      <div class="card rule"><div class="badge">✘</div><div><h4>Don't take customer data with you when you leave</h4><p>Lead lists and contacts belong to the data principal and the company, not to you. Taking them is a breach and can also be a criminal offence.</p></div></div>
+      <div class="card rule"><div class="badge">✘</div><div><h4>Don't keep data forever "just in case"</h4><p>When the purpose is over and there's no legal need to keep the data, it must be erased under the retention policy.</p></div></div>
+      <div class="card rule"><div class="badge">✘</div><div><h4>Don't bundle or force consent</h4><p>"Agree to marketing calls or you can't book a site visit" is not valid consent. Consent must be free and unconditional.</p></div></div>
+      <div class="card rule"><div class="badge">✘</div><div><h4>Don't leave documents lying around</h4><p>Printed booking forms, cheque copies and KYC files on desks or in site-office drawers are breaches waiting to happen. Lock them away or shred them.</p></div></div>
+      <div class="card rule"><div class="badge">✘</div><div><h4>Don't hide or delay a breach</h4><p>Covering up a mistake turns a manageable incident into a serious violation. Failing to notify can cost up to ₹200 crore.</p></div></div>
+    </div>
+  </section>
+
+  <!-- RIGHTS -->
+  <section id="rights">
+    <div class="eyebrow">What customers can ask of us</div>
+    <h2>Rights of the Data Principal</h2>
+    <p class="lead">Every customer and lead has these rights. If someone asks, don't brush them off. Route the request to the designated officer.</p>
+    <details open><summary>📄 Right to information</summary><div class="body"><p>To know what personal data we hold about them, how it is being processed, and who we have shared it with.</p></div></details>
+    <details><summary>✏️ Right to correction &amp; erasure</summary><div class="body"><p>To correct inaccurate data, complete or update it, and have it erased when it's no longer needed (unless the law requires us to keep it).</p></div></details>
+    <details><summary>↩️ Right to withdraw consent</summary><div class="body"><p>At any time, and as easily as it was given. After withdrawal, we must stop processing, and so must our vendors.</p></div></details>
+    <details><summary>🗣️ Right to grievance redressal</summary><div class="body"><p>To raise a complaint with us and get a response within the prescribed time (up to 90 days under the Rules). If unhappy, they can escalate to the Data Protection Board.</p></div></details>
+    <details><summary>👥 Right to nominate</summary><div class="body"><p>To nominate someone to exercise their rights in case of death or incapacity.</p></div></details>
+    <div class="callout"><b>Customers have duties too:</b> they must not give false information, impersonate someone, or file frivolous complaints. They can be fined up to ₹10,000 for doing so.</div>
+  </section>
+
+  <!-- PENALTIES -->
+  <section id="penalties">
+    <div class="eyebrow">Consequences of non-compliance</div>
+    <h2>What happens if we get it wrong?</h2>
+    <p class="lead">Penalties under the Schedule of the Act, per instance. Tap a row for details.</p>
+    <div class="card" id="penCard">
+      <div class="pen-row"><div class="label">Failing to take reasonable security safeguards to prevent a breach<span class="chev">▼</span></div><div class="amt">₹250 Cr</div><div class="bar"><i data-w="100"></i></div><div class="pen-detail">The biggest penalty. Weak passwords, unencrypted devices, open shared drives or no access control can all lead here after a breach.</div></div>
+      <div class="pen-row"><div class="label">Failing to notify the Board &amp; affected people of a breach<span class="chev">▼</span></div><div class="amt">₹200 Cr</div><div class="bar"><i data-w="80"></i></div><div class="pen-detail">Every breach must be reported to the Board and each affected person without delay, with a detailed report within 72 hours. This is why you must report incidents internally at once.</div></div>
+      <div class="pen-row"><div class="label">Violating obligations for children's data<span class="chev">▼</span></div><div class="amt">₹200 Cr</div><div class="bar"><i data-w="80"></i></div><div class="pen-detail">Processing data of anyone under 18 without verifiable parental consent, or tracking or targeting ads at children.</div></div>
+      <div class="pen-row"><div class="label">Additional obligations of Significant Data Fiduciaries<span class="chev">▼</span></div><div class="amt">₹150 Cr</div><div class="bar"><i data-w="60"></i></div><div class="pen-detail">For organisations the government notifies as "significant": DPO appointment, independent audits and impact assessments.</div></div>
+      <div class="pen-row"><div class="label">Breach of a voluntary undertaking given to the Board<span class="chev">▼</span></div><div class="amt">₹50 Cr</div><div class="bar"><i data-w="20"></i></div><div class="pen-detail">Not honouring commitments made to the Board to settle a case.</div></div>
+      <div class="pen-row"><div class="label">Any other violation of the Act or Rules<span class="chev">▼</span></div><div class="amt">₹50 Cr</div><div class="bar"><i data-w="20"></i></div><div class="pen-detail">Covers invalid consent, no proper notice, using data beyond its purpose, over-retention, ignoring rights requests, and similar failures.</div></div>
+    </div>
+
+    <h3 style="margin-top:32px">Beyond the fine</h3>
+    <div class="grid g3">
+      <div class="card"><b>🔍 Board inquiry</b><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px">Investigations, document demands and hearings take management time and disrupt the business.</p></div>
+      <div class="card"><b>🚫 Blocking of services</b><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px">For repeated violations, the government can direct that a platform or service be blocked to the public.</p></div>
+      <div class="card"><b>📰 Public reputation</b><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px">Breaches make the news. In real estate, where buyers commit their life savings, lost trust is hard to win back.</p></div>
+      <div class="card"><b>🧾 Lost deals &amp; partners</b><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px">Banks, channel partners and corporate clients increasingly require DPDP compliance before working with you.</p></div>
+      <div class="card"><b>👤 Personal accountability</b><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px">Employees who break data policies face disciplinary action, and data theft can bring IT Act and criminal liability.</p></div>
+      <div class="card"><b>⏳ Consent to be re-collected</b><p style="color:var(--muted);margin:6px 0 0;font-size:14.5px">Data gathered without valid consent may have to be deleted, wiping out a large part of the lead database.</p></div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section id="why">
+    <div class="eyebrow">Beyond the penalty</div>
+    <h2>Why it matters even without the fines</h2>
+    <p class="lead">Fines are the law's way of enforcing something more basic: personal data belongs to the person, and misuse of it causes real harm.</p>
+    <div class="grid g2 why">
+      <div class="card"><div class="icon">🛡️</div><h3>It protects real people from real harm</h3><p>A leaked Aadhaar, PAN or bank detail can be used for identity theft, loan fraud, SIM-swap scams and fake property deals. Leaked phone numbers lead to spam and harassment. Every record is a person and their family.</p></div>
+      <div class="card"><div class="icon">🤝</div><h3>Trust is our product</h3><p>A home is the biggest purchase most people make. They share income, family and financial details because they trust us. Protecting that data shows we deserve the trust.</p></div>
+      <div class="card"><div class="icon">🎯</div><h3>Better data, better business</h3><p>Consented, accurate, purpose-bound data means warmer leads, fewer complaints and higher conversion. Spam-calling unwilling contacts damages our brand and gets our numbers flagged.</p></div>
+      <div class="card"><div class="icon">🔐</div><h3>Less data means less risk</h3><p>Data we don't collect can't be leaked. Data we delete on time can't be stolen. Minimisation is a security strategy as well as a legal duty.</p></div>
+      <div class="card"><div class="icon">🌐</div><h3>Defence against cyber-attacks</h3><p>Real estate firms hold valuable financial and identity data, which makes them targets for phishing and ransomware. The security habits the Act requires are the same ones that keep attackers out.</p></div>
+      <div class="card"><div class="icon">💡</div><h3>It's the right thing to do</h3><p>Privacy is a fundamental right in India (Supreme Court, <i>Puttaswamy</i>, 2017). Treat customers' data the way you'd want a bank or hospital to treat yours.</p></div>
+    </div>
+    <div class="callout red"><b>Ask yourself before every action:</b> "Would this customer be comfortable if they saw what I'm doing with their data right now?" If the answer is no, stop and check.</div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="quiz">
+    <div class="eyebrow">Test yourself</div>
+    <h2>What would you do?</h2>
+    <p class="lead">Six real-life situations. Pick the best answer.</p>
+    <div class="card" id="quizBox">
+      <div class="quiz-head"><b id="qCount">Question 1 of 6</b><span id="qScore" style="color:var(--muted)">Score: 0</span></div>
+      <div class="progress"><i id="qBar"></i></div>
+      <div id="qArea"></div>
+    </div>
+  </section>
+
+  <!-- CHECKLIST -->
+  <section id="checklist">
+    <div class="eyebrow">Make it personal</div>
+    <h2>My DPDP checklist</h2>
+    <p class="lead">Tick what you already do. Your progress is saved in this browser.</p>
+    <div class="card">
+      <div class="meter"><div class="progress"><i id="ckBar"></i></div><b id="ckPct">0%</b></div>
+      <div id="ckList"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <b>Need help or want to report an incident?</b> Contact the Data Protection / Grievance Officer or the IT team right away.<br><br>
+    This page is for awareness and training only. It is not legal advice. Penalty amounts are upper limits under the Schedule of the DPDP Act, 2023. Implementation dates follow the DPDP Rules, 2025. Refer to the company's data protection policy for official procedures.
+  </div>
+</footer>
+
+<script>
+  // Theme toggle
+  (function () {
+    var root = document.documentElement;
+    try { var saved = localStorage.getItem('dpdp-theme'); if (saved) root.setAttribute('data-theme', saved); } catch (e) {}
+    document.getElementById('themeBtn').addEventListener('click', function () {
+      var cur = root.getAttribute('data-theme') ||
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      var next = cur === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('dpdp-theme', next); } catch (e) {}
+    });
+  })();
+
+  // Flip cards
+  document.querySelectorAll('.term').forEach(function (t) {
+    t.addEventListener('click', function () { t.classList.toggle('flipped'); });
+  });
+
+  // Tabs
+  document.querySelectorAll('.tab').forEach(function (tab) {
+    tab.addEventListener('click', function () {
+      document.querySelectorAll('.tab').forEach(function (t) {
+        t.setAttribute('aria-selected', 'false');
+        document.getElementById(t.dataset.panel).hidden = true;
+      });
+      tab.setAttribute('aria-selected', 'true');
+      document.getElementById(tab.dataset.panel).hidden = false;
+    });
+  });
+
+  // Penalty rows
+  document.querySelectorAll('.pen-row').forEach(function (r) {
+    r.addEventListener('click', function () { r.classList.toggle('open'); });
+  });
+  var penObs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.querySelectorAll('.bar i').forEach(function (b) { b.style.width = b.dataset.w + '%'; });
+        penObs.disconnect();
+      }
+    });
+  }, { threshold: 0.2 });
+  penObs.observe(document.getElementById('penCard'));
+
+  // Active nav link
+  var links = document.querySelectorAll('#navLinks a');
+  var secObs = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        links.forEach(function (l) { l.classList.toggle('active', l.getAttribute('href') === '#' + e.target.id); });
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  document.querySelectorAll('main section').forEach(function (s) { secObs.observe(s); });
+
+  // Quiz
+  var Q = [
+    { q: "A customer sends a scan of their Aadhaar and PAN on your personal WhatsApp for a booking. What should you do?",
+      o: ["Forward it to the team WhatsApp group so everyone has it",
+          "Upload it to the official CRM / booking system, then delete it from your phone and chat",
+          "Save it in your phone gallery in case you need it later"],
+      a: 1, e: "KYC documents must live only in secured, access-controlled systems. Copies on personal phones and group chats are uncontrolled and can easily leak." },
+    { q: "A broker offers you a list of 5,000 'HNI investor' phone numbers at a low price. What's the right move?",
+      o: ["Buy it. More leads means more sales",
+          "Buy it but only send WhatsApp messages, not calls",
+          "Decline. These people never consented to us contacting them"],
+      a: 2, e: "Purchased lists have no valid consent for our purpose. Using them violates the Act and harms the brand." },
+    { q: "A lead says on the phone: 'Please stop calling me and delete my number.' What do you do?",
+      o: ["Say OK, but call again next month with a new offer",
+          "Stop all contact, log the withdrawal in the CRM and raise an erasure request per company process",
+          "Ignore it. They gave their number at a site visit, so we have consent"],
+      a: 1, e: "Consent can be withdrawn at any time, as easily as it was given. Once withdrawn, processing must stop, including by our vendors." },
+    { q: "You realise your laptop with a customer Excel sheet was stolen from your car. What now?",
+      o: ["Report it to IT / the Data Protection Officer immediately",
+          "Wait a few days to see if it turns up",
+          "Don't mention it. The laptop had a password"],
+      a: 0, e: "This is a personal data breach. The company must notify the Board and affected people without delay, with a detailed report within 72 hours. Every hour you wait counts. Not notifying can cost up to ₹200 crore." },
+    { q: "At a site event, a 15-year-old fills in a lucky-draw form with their phone number and email. Is that fine?",
+      o: ["Yes, add them to the marketing list",
+          "No. A child's data needs verifiable parental consent, and children must not be targeted with ads",
+          "Yes, if they tick the consent box themselves"],
+      a: 1, e: "Under the DPDP Act, anyone under 18 is a child. A parent or guardian must give verifiable consent, and tracking or targeted advertising to children is prohibited." },
+    { q: "Your home-loan partner asks for the full list of site-visit leads to cross-sell loans. What should happen?",
+      o: ["Share the full list. They are a trusted partner",
+          "Share only phone numbers, not names",
+          "Share only data of customers who have specifically consented to this, under a proper agreement"],
+      a: 2, e: "Purpose limitation: data collected for a site visit can't be passed to third parties for a new purpose without specific consent. Even a phone number alone is personal data." }
+  ];
+  var qi = 0, score = 0;
+  var area = document.getElementById('qArea');
+  function renderQ() {
+    document.getElementById('qCount').textContent = 'Question ' + (qi + 1) + ' of ' + Q.length;
+    document.getElementById('qScore').textContent = 'Score: ' + score;
+    document.getElementById('qBar').style.width = (qi / Q.length * 100) + '%';
+    var item = Q[qi];
+    area.innerHTML = '<p class="q-text"></p><div class="opts"></div><div class="feedback"></div>';
+    area.querySelector('.q-text').textContent = item.q;
+    var opts = area.querySelector('.opts');
+    item.o.forEach(function (txt, i) {
+      var b = document.createElement('button');
+      b.className = 'opt'; b.textContent = txt;
+      b.addEventListener('click', function () { answer(i); });
+      opts.appendChild(b);
+    });
+  }
+  function answer(i) {
+    var item = Q[qi];
+    var btns = area.querySelectorAll('.opt');
+    btns.forEach(function (b, j) {
+      b.disabled = true;
+      if (j === item.a) b.classList.add('correct');
+      else if (j === i) b.classList.add('wrong');
+    });
+    if (i === item.a) score++;
+    document.getElementById('qScore').textContent = 'Score: ' + score;
+    var fb = area.querySelector('.feedback');
+    fb.style.display = 'block';
+    fb.innerHTML = '<b>' + (i === item.a ? '✅ Correct! ' : '❌ Not quite. ') + '</b>';
+    fb.appendChild(document.createTextNode(item.e));
+    var next = document.createElement('button');
+    next.className = 'btn';
+    next.textContent = qi < Q.length - 1 ? 'Next question →' : 'See my result';
+    next.addEventListener('click', function () { qi++; qi < Q.length ? renderQ() : renderResult(); });
+    area.appendChild(next);
+  }
+  function renderResult() {
+    document.getElementById('qBar').style.width = '100%';
+    document.getElementById('qCount').textContent = 'Quiz complete';
+    var msg = score === Q.length ? "Excellent! You're a data protection champion. 🏆"
+            : score >= 4 ? "Good work! Review the ones you missed."
+            : "Worth another look. Go through the Do's & Don'ts again.";
+    area.innerHTML = '<div class="result"><div class="score">' + score + ' / ' + Q.length + '</div><p>' + msg + '</p><button class="btn secondary" id="retry">Try again</button></div>';
+    document.getElementById('retry').addEventListener('click', function () { qi = 0; score = 0; renderQ(); });
+  }
+  renderQ();
+
+  // Checklist
+  var CK = [
+    "I collect only the personal data I actually need for the task",
+    "I tell customers why I'm collecting their data and get clear consent",
+    "I store customer data only in the official CRM / approved systems",
+    "I don't keep KYC documents on my personal phone, WhatsApp or email",
+    "My phone and laptop have screen locks and strong passwords",
+    "I never use bought or scraped lead lists",
+    "I stop contacting anyone who asks me to, and log it in the CRM",
+    "I know who the Data Protection / Grievance Officer is",
+    "I would report a lost device or mis-sent email immediately",
+    "I shred or lock away printed customer documents"
+  ];
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem('dpdp-checklist') || '{}') || {}; } catch (e) { state = {}; }
+  var list = document.getElementById('ckList');
+  function updateMeter() {
+    var done = CK.filter(function (_, i) { return state[i]; }).length;
+    var pct = Math.round(done / CK.length * 100);
+    document.getElementById('ckBar').style.width = pct + '%';
+    document.getElementById('ckPct').textContent = pct + '%';
+  }
+  CK.forEach(function (txt, i) {
+    var lab = document.createElement('label');
+    lab.className = 'check' + (state[i] ? ' done' : '');
+    var cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = !!state[i];
+    var sp = document.createElement('span'); sp.textContent = txt;
+    cb.addEventListener('change', function () {
+      state[i] = cb.checked; lab.classList.toggle('done', cb.checked);
+      try { localStorage.setItem('dpdp-checklist', JSON.stringify(state)); } catch (e) {}
+      updateMeter();
+    });
+    lab.appendChild(cb); lab.appendChild(sp); list.appendChild(lab);
+  });
+  updateMeter();
+</script>
+</body>
+</html>
